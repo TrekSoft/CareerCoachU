@@ -1,0 +1,10 @@
+{
+    "extends": "rallycoding",
+    "rules": {
+      "arrow-body-style": 0
+    },
+    "globals": {
+        "navigationOptions": true,
+        "fetch": true
+    }
+}

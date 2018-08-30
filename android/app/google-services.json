@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "693995890466",
+    "firebase_url": "https://careercoaching-3912d.firebaseio.com",
+    "project_id": "careercoaching-3912d",
+    "storage_bucket": "careercoaching-3912d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693995890466:android:2995ffa61f40d870",
+        "android_client_info": {
+          "package_name": "com.careercoachu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693995890466-91bjp7s2gq0sktond7kjbd4pjaom8mpo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTDcGoNwo7U6KmVebA9JvSI11oiDxOM4g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:693995890466:android:f35ed4f16ed20441",
+        "android_client_info": {
+          "package_name": "com.getacareercoach"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "693995890466-91bjp7s2gq0sktond7kjbd4pjaom8mpo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTDcGoNwo7U6KmVebA9JvSI11oiDxOM4g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
