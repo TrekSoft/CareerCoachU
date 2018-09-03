@@ -35,17 +35,8 @@ export const registerUser = (user, password) => (dispatch) => {
         const userWithId = { ...user, id };
 
         ref.set(userWithId)
-        .then(async (userCredential) => {
-          try {
-            console.log('up here');
-            await AsyncStorage.setItem(USER_CREDENTIAL, userCredential);
-            console.log('finished');
+        .then(() => {
             dispatch({ type: REGISTER_USER_SUCCESS, payload: userWithId });
-            resolve();
-          } catch (error) {
-              console.log(error);
-              reject();
-          }
         })
         .catch((error) => {
           dispatch({ type: REGISTER_USER_FAIL, payload: error.message });

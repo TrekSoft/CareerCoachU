@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { Container, Content, Button, Text } from 'native-base';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
 import * as actions from './actions';
 
 class RoleSelection extends Component {
   static navigationOptions = {
       header: null
+  }
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(user => {
+      console.log(user);
+    });
   }
 
   chooseRole(role) {
