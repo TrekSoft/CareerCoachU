@@ -2,7 +2,8 @@ import {
   SET_USER_DATA,
   USER_EMAIL_CHANGE,
   USER_PASSWORD_CHANGE,
-  REGISTER_USER_SUCCESS
+  REGISTER_USER_SUCCESS,
+  IMAGE_UPLOAD_SUCCESS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -28,6 +29,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, password: action.payload };
     case REGISTER_USER_SUCCESS:
       return { ...action.payload, password: '' };
+    case IMAGE_UPLOAD_SUCCESS:
+      return { ...state, pictureURL: action.payload };
     default:
       return state;
   }

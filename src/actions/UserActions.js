@@ -1,13 +1,13 @@
 import firebase from 'react-native-firebase';
-import { AsyncStorage } from 'react-native';
 import {
   USER_EMAIL_CHANGE,
   USER_PASSWORD_CHANGE,
   REGISTER_USER_SUBMIT,
   REGISTER_USER_SUCCESS,
-  REGISTER_USER_FAIL
+  REGISTER_USER_FAIL,
+  IMAGE_UPLOAD_SUCCESS,
+  IMAGE_UPLOAD_FAIL
 } from './types';
-import { USER_CREDENTIAL } from '../constants/StorageKeys';
 
 export const userEmailChange = (email) => ({
   type: USER_EMAIL_CHANGE,
@@ -31,12 +31,12 @@ export const registerUser = (user, password) => (dispatch) => {
       firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(user.email, password)
       .then((response) => {
         const id = response.user.uid;
-        const ref = firebase.firestore().collection('users').doc(id);
         const userWithId = { ...user, id };
 
-        ref.set(userWithId)
+        firebase.firestore().collection('users').doc(id).set(userWithId)
         .then(() => {
             dispatch({ type: REGISTER_USER_SUCCESS, payload: userWithId });
+            resolve();
         })
         .catch((error) => {
           dispatch({ type: REGISTER_USER_FAIL, payload: error.message });
@@ -49,4 +49,16 @@ export const registerUser = (user, password) => (dispatch) => {
       });
     }
   });
+};
+
+export const uploadImage = (user, uri, imageName) => {
+  return (dispatch) => {
+    firebase.storage().ref(`profilePics/${imageName}`).putFile(uri)
+    .then((photoURL) => {
+      firebase.firestore().collection('users').doc(user.id).update({ photoURL })
+      .then(() => dispatch({ type: IMAGE_UPLOAD_SUCCESS, payload: photoURL }))
+      .catch((error) => dispatch({ type: IMAGE_UPLOAD_FAIL, payload: error }));
+    })
+    .catch((error) => dispatch({ type: IMAGE_UPLOAD_FAIL, payload: error }));
+  };
 };

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, View, KeyboardAvoidingView, Alert } from 'react-native';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-picker';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {
@@ -42,12 +42,8 @@ class RegisterPhotoName extends Component {
   }
 
   pickPhoto() {
-    ImagePicker.openPicker({
-      width: 400,
-      height: 400,
-      cropping: true
-    }).then(image => {
-      this.props.uploadImage(image.path, 'test.jpg');
+    ImagePicker.showImagePicker(null, (response) => {
+      this.props.uploadImage(this.props.user, response.uri, 'test.jpg');
     });
   }
 

@@ -1,4 +1,3 @@
-import firebase from 'react-native-firebase';
 import {
   SET_USER_DATA
 } from './types';
@@ -43,16 +42,4 @@ export const getLinkedInData = (auth) => (dispatch) => {
   }
   )
   .catch((error) => console.log(error));
-};
-
-export const uploadImage = (uri, imageName) => {
-  return (dispatch) => {
-    firebase.storage().ref(`profilePics/${imageName}`).putFile(uri)
-    .then((url) => {
-      console.log(url);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  };
 };
