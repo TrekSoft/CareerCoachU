@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, KeyboardAvoidingView } from 'react-native';
+import { View } from 'react-native';
 import {
   Button,
   Container,
+  Content,
   Footer,
   FooterTab,
   Input,
@@ -31,7 +32,7 @@ class RegisterPhotoName extends Component {
   onNext() {
     this.props.registerUser(this.props.user, this.props.password)
     .then(() => this.props.navigation.navigate('RegisterPhotoName'))
-    .catch((error) => firebase.crashlytics().reportError(REGISTER_USER, error));
+    .catch((error) => firebase.crashlytics().recordError(REGISTER_USER, error));
   }
 
   render() {
@@ -39,24 +40,22 @@ class RegisterPhotoName extends Component {
 
     return (
       <Container>
-        <KeyboardAvoidingView style={styles.page} behavior='position'>
+        <Content contentContainerStyle={styles.page}>
           <View style={[styles.outerView, styles.headerContainer]}>
             <Text style={styles.headerText}>
               Choose an email and password
             </Text>
           </View>
-          <Item style={styles.item} stackedLabel>
+          <Item style={styles.item} floatingLabel>
             <Label>Email</Label>
             <Input
-              style={styles.input}
               onChangeText={this.onEmailChange.bind(this)}
               value={props.email}
             />
           </Item>
-          <Item style={styles.item} stackedLabel>
+          <Item style={styles.item} floatingLabel>
             <Label>Password</Label>
             <Input
-              style={styles.input}
               onChangeText={this.onPasswordChange.bind(this)}
               value={props.password}
               secureTextEntry
@@ -65,7 +64,7 @@ class RegisterPhotoName extends Component {
           <View style={[styles.outerView, styles.errorContainer]}>
             <Text style={styles.errorText}>{props.error}</Text>
           </View>
-        </KeyboardAvoidingView>
+        </Content>
         <Footer>
           <FooterTab>
             <Button
@@ -83,26 +82,17 @@ class RegisterPhotoName extends Component {
 
 const styles = {
   errorContainer: {
-    marginTop: 10,
-    marginLeft: 15,
-    marginRight: 15
+    marginTop: 10
   },
   errorText: {
     color: '#d32f2f'
   },
   item: {
-    alignSelf: 'center',
     marginTop: 15,
-    marginLeft: 15,
-    marginRight: 15
-  },
-  input: {
-    backgroundColor: 'white',
-    height: 60
+    marginBottom: 15
   },
   headerContainer: {
-    marginTop: 50,
-    marginHorizontal: 20
+    marginTop: 50
   },
   headerText: {
     fontSize: 35,
@@ -115,10 +105,9 @@ const styles = {
     alignItems: 'center'
   },
   page: {
-    flex: 1,
-    flexDirection: 'column',
+    flexGrow: 1,
     backgroundColor: '#ECEFF1',
-    alignItems: 'center'
+    paddingHorizontal: '12%'
   }
 };
 

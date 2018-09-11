@@ -12,7 +12,27 @@ class BecomeCoach extends Component {
   render() {
     return (
       <Container>
-        <Content contentContainerStyle={styles.pageStyle}>
+        <Content contentContainerStyle={styles.page}>
+            <Text style={styles.text}>
+              We highly recommend signing up with your LinkedIn account.
+              This will help build trust with clients and enable them
+              to easily review your accomplishments and experience.
+            </Text>
+
+            <Button
+              onPress={() => this.modal.open()}
+              style={[styles.button, styles.linkedin]}
+            >
+              <Text>Sign up with LinkedIn</Text>
+            </Button>
+
+            <Button
+              onPress={() => this.props.navigation.navigate('RegisterEmailPassword')}
+              style={[styles.button, styles.skip]}
+            >
+              <Text>Skip</Text>
+            </Button>
+
             <LinkedInModal
               ref={ref => {
                 this.modal = ref;
@@ -20,18 +40,13 @@ class BecomeCoach extends Component {
               clientID={'779uhpqrcjnupa'}
               clientSecret={'i3QWrGTUGwqOzzUS'}
               redirectUri={'http://www.getacareercoach.com'}
+              linkText=''
               onSuccess={
                 data =>
                 this.props.getLinkedInData(data.access_token)
                 .then(() => this.props.navigation.navigate('RegisterEmailPassword'))
               }
             />
-            <Button
-              onPress={() => this.modal.open()}
-              style={styles.buttonStyle}
-            >
-              <Text>Connect LinkedIn profile</Text>
-            </Button>
         </Content>
       </Container>
     );
@@ -39,25 +54,30 @@ class BecomeCoach extends Component {
 }
 
 const styles = {
-  textStyle: {
-    fontSize: 60,
-    color: '#616161',
-    marginBottom: 40,
-    marginTop: -50
+  text: {
+    marginBottom: 25,
+    paddingHorizontal: 2
   },
-  pageStyle: {
+  page: {
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#ECEFF1',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: '12%'
   },
-  buttonStyle: {
+  button: {
     alignSelf: 'center',
     justifyContent: 'center',
     marginBottom: 15,
-    width: '75%',
+    width: '100%',
     height: 75
+  },
+  linkedin: {
+    backgroundColor: '#0077B5'
+  },
+  skip: {
+    backgroundColor: '#999'
   }
 };
 

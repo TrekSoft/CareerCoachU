@@ -28,7 +28,7 @@ export const registerUser = (user, password) => (dispatch) => {
       dispatch({ type: REGISTER_USER_FAIL, payload: error });
       reject(error);
     } else {
-      firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(user.email, password)
+      firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(user.email.trim(), password)
       .then((response) => {
         const id = response.user.uid;
         const userWithId = { ...user, id };
@@ -40,12 +40,12 @@ export const registerUser = (user, password) => (dispatch) => {
         })
         .catch((error) => {
           dispatch({ type: REGISTER_USER_FAIL, payload: error.message });
-          reject(error);
+          reject(error.message);
         });
       })
       .catch((error) => {
         dispatch({ type: REGISTER_USER_FAIL, payload: error.message });
-        reject(error);
+        reject(error.message);
       });
     }
   });

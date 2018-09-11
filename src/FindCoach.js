@@ -95,16 +95,16 @@ const styles = {
     color: 'red'
   },
   pageStyle: {
-    flex: 1,
+    flexGrow: 1,
     flexDirection: 'column',
     backgroundColor: '#ECEFF1',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: '12%'
   },
   itemStyle: {
     alignSelf: 'center',
-    marginTop: 15,
-    width: '85%'
+    marginTop: 15
   },
   inputStyle: {
     backgroundColor: 'white',
@@ -115,7 +115,7 @@ const styles = {
     justifyContent: 'center',
     marginTop: 15,
     marginBottom: 15,
-    width: '85%',
+    width: '100%',
     height: 60
   }
 };

@@ -53,17 +53,18 @@ const styles = {
     marginTop: -50
   },
   pageStyle: {
-    flex: 1,
+    flexGrow: 1,
     flexDirection: 'column',
     backgroundColor: '#ECEFF1',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: '12%'
   },
   buttonStyle: {
     alignSelf: 'center',
     justifyContent: 'center',
     marginBottom: 15,
-    width: '75%',
+    width: '100%',
     height: 75
   }
 };
