@@ -1,6 +1,6 @@
-import {
-  SET_USER_DATA
-} from './types';
+import firebase from 'react-native-firebase';
+import { LINKEDIN } from '../constants/ErrorCodes';
+import { SET_USER_DATA } from './types';
 
 export const getLinkedInData = (auth) => (dispatch) => {
   const baseApi = 'https://api.linkedin.com/v1/people/';
@@ -41,5 +41,5 @@ export const getLinkedInData = (auth) => (dispatch) => {
     });
   }
   )
-  .catch((error) => console.log(error));
+  .catch((error) => firebase.crashlytics().reportError(LINKEDIN, error));
 };

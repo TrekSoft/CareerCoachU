@@ -14,6 +14,8 @@ import {
   Text
 } from 'native-base';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
+import { IMAGE_PICKER } from './constants/ErrorCodes';
 import * as actions from './actions';
 
 class RegisterPhotoName extends Component {
@@ -33,7 +35,7 @@ class RegisterPhotoName extends Component {
       'Cancel signup?',
       'Are you sure you want to cancel signup and return to the main page?',
       [
-        { text: 'Cancel', onPress: () => console.log('Back action cancelled'), style: 'cancel' },
+        { text: 'Cancel', onPress: null, style: 'cancel' },
         { text: 'OK', onPress: () => nav.dispatch(resetAction) },
       ]
     );
@@ -43,7 +45,14 @@ class RegisterPhotoName extends Component {
 
   pickPhoto() {
     ImagePicker.showImagePicker(null, (response) => {
-      this.props.uploadImage(this.props.user, response.uri, 'test.jpg');
+      if (response.didCancel) {
+        // Do nothing
+      } else if (response.error) {
+        firebase.crashlytics().recordError(IMAGE_PICKER, response.error);
+      } else {
+        const userId = this.props.user.id;
+        this.props.uploadProfilePic(userId, response.uri);
+      }
     });
   }
 

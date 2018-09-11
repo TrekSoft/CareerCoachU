@@ -11,6 +11,8 @@ import {
   Text
 } from 'native-base';
 import { connect } from 'react-redux';
+import firebase from 'react-native-firebase';
+import { REGISTER_USER } from './constants/ErrorCodes';
 import * as actions from './actions';
 
 class RegisterPhotoName extends Component {
@@ -29,7 +31,7 @@ class RegisterPhotoName extends Component {
   onNext() {
     this.props.registerUser(this.props.user, this.props.password)
     .then(() => this.props.navigation.navigate('RegisterPhotoName'))
-    .catch((error) => console.log(error));
+    .catch((error) => firebase.crashlytics().reportError(REGISTER_USER, error));
   }
 
   render() {

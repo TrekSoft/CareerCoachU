@@ -51,11 +51,12 @@ export const registerUser = (user, password) => (dispatch) => {
   });
 };
 
-export const uploadImage = (user, uri, imageName) => {
+export const uploadProfilePic = (userId, uri) => {
   return (dispatch) => {
-    firebase.storage().ref(`profilePics/${imageName}`).putFile(uri)
-    .then((photoURL) => {
-      firebase.firestore().collection('users').doc(user.id).update({ photoURL })
+    firebase.storage().ref(`profilePics/${userId}.jpg`).putFile(uri)
+    .then((response) => {
+      const photoURL = response.downloadURL;
+      firebase.firestore().collection('users').doc(userId).update({ photoURL })
       .then(() => dispatch({ type: IMAGE_UPLOAD_SUCCESS, payload: photoURL }))
       .catch((error) => dispatch({ type: IMAGE_UPLOAD_FAIL, payload: error }));
     })
