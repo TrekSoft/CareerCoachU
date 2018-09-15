@@ -55,6 +55,7 @@ class BecomeCoach extends Component {
 
 const styles = {
   text: {
+    marginTop: '-25%',
     marginBottom: 25,
     paddingHorizontal: 2
   },

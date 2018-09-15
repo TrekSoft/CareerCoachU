@@ -9,11 +9,13 @@ import {
   Input,
   Item,
   Label,
-  Text
+  Text,
+  Toast
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import { REGISTER_USER } from './constants/ErrorCodes';
+import { IN_PROGRESS } from './constants/SubmittedTypes';
 import * as actions from './actions';
 
 class RegisterPhotoName extends Component {
@@ -32,7 +34,41 @@ class RegisterPhotoName extends Component {
   onNext() {
     this.props.registerUser(this.props.user, this.props.password)
     .then(() => this.props.navigation.navigate('RegisterPhotoName'))
-    .catch((error) => firebase.crashlytics().recordError(REGISTER_USER, error));
+    .catch((error) => {
+      Toast.show({
+        text: error,
+        buttonText: 'Okay',
+        style: {
+          backgroundColor: '#d32f2f'
+        },
+        duration: 5000
+      });
+
+      firebase.crashlytics().recordError(REGISTER_USER, error);
+    });
+  }
+
+  renderSubmit() {
+    switch (this.props.submitted) {
+      case IN_PROGRESS:
+        return (
+          <Button
+            dark
+            full
+          >
+            <Text>Submitting...</Text>
+          </Button>
+        );
+      default:
+        return (
+          <Button
+            onPress={this.onNext.bind(this)}
+            full
+          >
+            <Text>Next</Text>
+          </Button>
+        );
+    }
   }
 
   render() {
@@ -61,18 +97,10 @@ class RegisterPhotoName extends Component {
               secureTextEntry
             />
           </Item>
-          <View style={[styles.outerView, styles.errorContainer]}>
-            <Text style={styles.errorText}>{props.error}</Text>
-          </View>
         </Content>
         <Footer>
           <FooterTab>
-            <Button
-              onPress={this.onNext.bind(this)}
-              full
-            >
-              <Text>Next</Text>
-            </Button>
+            {this.renderSubmit()}
           </FooterTab>
         </Footer>
       </Container>
@@ -92,7 +120,8 @@ const styles = {
     marginBottom: 15
   },
   headerContainer: {
-    marginTop: 50
+    marginTop: 50,
+    marginBottom: 20
   },
   headerText: {
     fontSize: 35,
@@ -116,8 +145,7 @@ const mapStateToProps = state => (
     user: state.user,
     email: state.user.email,
     password: state.user.password,
-    submitted: state.register.submitted,
-    error: state.register.error
+    submitted: state.register.submitted
   }
 );
 
