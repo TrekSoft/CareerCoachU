@@ -15,7 +15,7 @@ import {
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import { REGISTER_USER } from './constants/ErrorCodes';
-import { IN_PROGRESS } from './constants/SubmittedTypes';
+import { IN_PROGRESS, NOT_SUBMITTED } from './constants/SubmittedTypes';
 import * as actions from './actions';
 
 class RegisterPhotoName extends Component {
@@ -23,18 +23,34 @@ class RegisterPhotoName extends Component {
       title: 'Email & Password'
   }
 
+  state = {
+    email: '',
+    password: '',
+    submitted: NOT_SUBMITTED
+  };
+
+  componentDidMount() {
+    this.setState({ email: this.props.user.email });
+  }
+
   onEmailChange(email) {
-    this.props.userEmailChange(email);
+    this.setState({ email });
   }
 
   onPasswordChange(password) {
-    this.props.userPasswordChange(password);
+    this.setState({ password });
   }
 
   onNext() {
-    this.props.registerUser(this.props.user, this.props.password)
-    .then(() => this.props.navigation.navigate('RegisterPhotoName'))
+    this.setState({ submitted: IN_PROGRESS });
+
+    this.props.registerUser(this.props.user, this.state.email, this.state.password)
+    .then(() => {
+      this.setState({ submitted: NOT_SUBMITTED });
+      this.props.navigation.navigate('RegisterPhotoName');
+    })
     .catch((error) => {
+      this.setState({ submitted: NOT_SUBMITTED });
       Toast.show({
         text: error,
         buttonText: 'Okay',
@@ -49,7 +65,7 @@ class RegisterPhotoName extends Component {
   }
 
   renderSubmit() {
-    switch (this.props.submitted) {
+    switch (this.state.submitted) {
       case IN_PROGRESS:
         return (
           <Button
@@ -72,8 +88,6 @@ class RegisterPhotoName extends Component {
   }
 
   render() {
-    const props = this.props;
-
     return (
       <Container>
         <Content contentContainerStyle={styles.page}>
@@ -86,14 +100,14 @@ class RegisterPhotoName extends Component {
             <Label>Email</Label>
             <Input
               onChangeText={this.onEmailChange.bind(this)}
-              value={props.email}
+              value={this.state.email}
             />
           </Item>
           <Item style={styles.item} floatingLabel>
             <Label>Password</Label>
             <Input
               onChangeText={this.onPasswordChange.bind(this)}
-              value={props.password}
+              value={this.state.password}
               secureTextEntry
             />
           </Item>
@@ -142,10 +156,7 @@ const styles = {
 
 const mapStateToProps = state => (
   {
-    user: state.user,
-    email: state.user.email,
-    password: state.user.password,
-    submitted: state.register.submitted
+    user: state.user
   }
 );
 

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Container, Content, Item, Input, Button, Text } from 'native-base';
-import { connect } from 'react-redux';
-import * as actions from './actions';
+import firebase from 'react-native-firebase';
 import {
+  NOT_SUBMITTED,
   IN_PROGRESS,
   SUBMIT_SUCCESS,
   SUBMIT_ERROR
@@ -13,16 +13,25 @@ class FindCoach extends Component {
     title: 'Find a Coach',
   };
 
-  onEmailChange(text) {
-    this.props.comingSoonEmailChange(text);
+  state = {
+    email: '',
+    submitted: NOT_SUBMITTED
+  }
+
+  onEmailChange(email) {
+    this.setState({ email });
   }
 
   onEmailSubmit() {
-    this.props.comingSoonEmailSubmit(this.props.email);
+    this.setState({ submitted: IN_PROGRESS });
+
+    firebase.firestore().collection('comingSoonEmails').add({ email: this.state.email })
+    .then(() => this.setState({ submitted: SUBMIT_SUCCESS }))
+    .catch(() => this.setState({ submitted: SUBMIT_ERROR }));
   }
 
   renderSubmit() {
-    switch (this.props.submitted) {
+    switch (this.state.submitted) {
       case SUBMIT_SUCCESS:
         return (
           <Button
@@ -66,14 +75,14 @@ class FindCoach extends Component {
                 style={styles.inputStyle}
                 placeholder='Email address'
                 onChangeText={this.onEmailChange.bind(this)}
-                value={this.props.email}
+                value={this.state.email}
               />
             </Item>
 
             {this.renderSubmit()}
 
             {
-              this.props.submitted === SUBMIT_ERROR &&
+              this.state.submitted === SUBMIT_ERROR &&
               <Text style={styles.errorTextStyle}>
                 Sorry, something went wrong. Do you have internet?
               </Text>
@@ -120,9 +129,4 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => ({
-    email: state.comingSoon.email,
-    submitted: state.comingSoon.submitted
-});
-
-export default connect(mapStateToProps, actions)(FindCoach);
+export default FindCoach;

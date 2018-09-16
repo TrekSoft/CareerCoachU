@@ -5,6 +5,7 @@
     },
     "globals": {
         "navigationOptions": true,
-        "fetch": true
+        "fetch": true,
+        "state": true
     }
 }

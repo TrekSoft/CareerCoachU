@@ -1,37 +1,19 @@
 import firebase from 'react-native-firebase';
 import {
-  USER_EMAIL_CHANGE,
-  USER_PASSWORD_CHANGE,
-  REGISTER_USER_SUBMIT,
   REGISTER_USER_SUCCESS,
-  REGISTER_USER_FAIL,
-  IMAGE_UPLOAD_SUCCESS,
-  IMAGE_UPLOAD_FAIL
+  IMAGE_UPLOAD_SUCCESS
 } from './types';
 
-export const userEmailChange = (email) => ({
-  type: USER_EMAIL_CHANGE,
-  payload: email
-});
-
-export const userPasswordChange = (password) => ({
-  type: USER_PASSWORD_CHANGE,
-  payload: password
-});
-
-export const registerUser = (user, password) => (dispatch) => {
-  dispatch({ type: REGISTER_USER_SUBMIT });
-
+export const registerUser = (user, email, password) => (dispatch) => {
   return new Promise((resolve, reject) => {
-    if (!user || !user.email || !password) {
+    if (!email || !password) {
       const error = 'Email or password cannot be empty';
-      dispatch({ type: REGISTER_USER_FAIL, payload: error });
       reject(error);
     } else {
-      firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(user.email.trim(), password)
+      firebase.auth().createUserAndRetrieveDataWithEmailAndPassword(email.trim(), password)
       .then((response) => {
         const id = response.user.uid;
-        const userWithId = { ...user, id };
+        const userWithId = { ...user, id, email };
 
         firebase.firestore().collection('users').doc(id).set(userWithId)
         .then(() => {
@@ -39,27 +21,28 @@ export const registerUser = (user, password) => (dispatch) => {
             resolve();
         })
         .catch((error) => {
-          dispatch({ type: REGISTER_USER_FAIL, payload: error.message });
           reject(error.message);
         });
       })
       .catch((error) => {
-        dispatch({ type: REGISTER_USER_FAIL, payload: error.message });
         reject(error.message);
       });
     }
   });
 };
 
-export const uploadProfilePic = (userId, uri) => {
-  return (dispatch) => {
+export const uploadProfilePic = (userId, uri) => (dispatch) => {
+  return new Promise((resolve, reject) => {
     firebase.storage().ref(`profilePics/${userId}.jpg`).putFile(uri)
     .then((response) => {
       const photoURL = response.downloadURL;
       firebase.firestore().collection('users').doc(userId).update({ photoURL })
-      .then(() => dispatch({ type: IMAGE_UPLOAD_SUCCESS, payload: photoURL }))
-      .catch((error) => dispatch({ type: IMAGE_UPLOAD_FAIL, payload: error }));
+      .then(() => {
+        dispatch({ type: IMAGE_UPLOAD_SUCCESS, payload: photoURL });
+        resolve();
+      })
+      .catch((error) => reject(error.message));
     })
-    .catch((error) => dispatch({ type: IMAGE_UPLOAD_FAIL, payload: error }));
-  };
+    .catch((error) => reject(error.message));
+  });
 };
