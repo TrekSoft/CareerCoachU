@@ -1,0 +1,1 @@
+export const PROFILE_PIC_PLACEHOLDER = 'https://firebasestorage.googleapis.com/v0/b/careercoaching-3912d.appspot.com/o/common%2FprofilePicPlaceholder.png?alt=media&token=a7f025fd-d320-4a1d-b073-ef9562557c3f';

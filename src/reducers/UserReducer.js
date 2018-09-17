@@ -1,3 +1,4 @@
+import { PROFILE_PIC_PLACEHOLDER } from '../constants/ImageURLs';
 import {
   SET_USER_DATA,
   REGISTER_USER_SUCCESS,
@@ -13,7 +14,7 @@ const INITIAL_STATE = {
   industry: '',
   bio: '',
   profileURL: '',
-  pictureURL: ''
+  pictureURL: PROFILE_PIC_PLACEHOLDER
 };
 
 export default (state = INITIAL_STATE, action) => {

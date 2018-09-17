@@ -1,5 +1,6 @@
 import firebase from 'react-native-firebase';
 import { LINKEDIN } from '../constants/ErrorCodes';
+import { PROFILE_PIC_PLACEHOLDER } from '../constants/ImageURLs';
 import { SET_USER_DATA } from './types';
 
 export const getLinkedInData = (auth) => (dispatch) => {
@@ -26,6 +27,9 @@ export const getLinkedInData = (auth) => (dispatch) => {
   )
   .then((response) => response.json())
   .then((response) => {
+    const pictureURL = response.pictureUrls.values.length > 0 ? 
+      response.pictureUrls.values[0] : PROFILE_PIC_PLACEHOLDER;
+
     dispatch({
       type: SET_USER_DATA,
       payload: {
@@ -33,7 +37,7 @@ export const getLinkedInData = (auth) => (dispatch) => {
         lastName: response.lastName,
         title: response.headline,
         industry: response.industry,
-        pictureURL: response.pictureUrls.values[0],
+        pictureURL,
         profileURL: response.publicProfileUrl,
         bio: response.summary,
         email: response.emailAddress

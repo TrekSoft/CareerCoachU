@@ -1,28 +1,36 @@
 import React, { Component } from 'react';
-import { Image, View, KeyboardAvoidingView, Alert } from 'react-native';
+import { Image, View, Alert } from 'react-native';
 import ImagePicker from 'react-native-image-picker';
 import { AndroidBackHandler } from 'react-navigation-backhandler';
 import { StackActions, NavigationActions } from 'react-navigation';
 import {
   Button,
   Container,
+  Content,
   Footer,
   FooterTab,
   Input,
   Item,
   Label,
-  Text
+  Text,
+  Toast
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 import { IMAGE_PICKER } from './constants/ErrorCodes';
 import * as actions from './actions';
+import { IN_PROGRESS, NOT_SUBMITTED } from './constants/SubmittedTypes';
 
 class RegisterPhotoName extends Component {
   static navigationOptions = {
       title: 'Photo & Name',
       headerLeft: null
   }
+
+  state = {
+    photoUpload: NOT_SUBMITTED,
+    submit: NOT_SUBMITTED
+  };
 
   onHardwareBackButton() {
     const nav = this.props.navigation;
@@ -51,9 +59,39 @@ class RegisterPhotoName extends Component {
         firebase.crashlytics().recordError(IMAGE_PICKER, response.error);
       } else {
         const userId = this.props.user.id;
-        this.props.uploadProfilePic(userId, response.uri);
+        this.setState({ photoUpload: IN_PROGRESS });
+        this.props.uploadProfilePic(userId, response.uri)
+        .then(() => this.setState({ photoUpload: NOT_SUBMITTED }))
+        .catch((error) => {
+          this.setState({ photoUpload: NOT_SUBMITTED });
+          Toast.show({
+            text: error,
+            buttonText: 'Okay',
+            style: {
+              backgroundColor: '#d32f2f'
+            },
+            duration: 5000
+          });
+        });
       }
     });
+  }
+
+  renderPhotoUpload() {
+    switch (this.state.photoUpload) {
+      case IN_PROGRESS:
+        return (
+          <Button dark>
+            <Text>Uploading...</Text>
+          </Button>
+        );
+      default:
+        return (
+          <Button onPress={this.pickPhoto.bind(this)}>
+            <Text>Upload new</Text>
+          </Button>
+        );
+    }
   }
 
   render() {
@@ -62,8 +100,8 @@ class RegisterPhotoName extends Component {
     return (
       <AndroidBackHandler onBackPress={this.onHardwareBackButton.bind(this)}>
         <Container>
-          <KeyboardAvoidingView style={styles.pageStyle} behavior='position'>
-            <View style={styles.outerViewStyle}>
+          <Content contentContainerStyle={styles.page}>
+            <View style={styles.outerView}>
               <View style={styles.profilePicContainer}>
                 <Image
                   resizeMode={'cover'}
@@ -72,26 +110,18 @@ class RegisterPhotoName extends Component {
                 />
               </View>
               <View style={styles.uploadButtonContainer}>
-                <Button onPress={this.pickPhoto.bind(this)}>
-                  <Text>Upload new</Text>
-                </Button>
+                {this.renderPhotoUpload()}
               </View>
             </View>
-            <Item style={styles.itemStyle} stackedLabel>
+            <Item style={styles.item} floatingLabel>
               <Label>First name</Label>
-              <Input
-                style={styles.inputStyle}
-                value={user.firstName}
-              />
+              <Input value={user.firstName} />
             </Item>
-            <Item style={styles.itemStyle} stackedLabel>
+            <Item style={styles.item} floatingLabel>
               <Label>Last name</Label>
-              <Input
-                style={styles.inputStyle}
-                value={user.lastName}
-              />
+              <Input value={user.lastName} />
             </Item>
-          </KeyboardAvoidingView>
+          </Content>
           <Footer>
            <FooterTab>
              <Button full>
@@ -106,30 +136,24 @@ class RegisterPhotoName extends Component {
 }
 
 const styles = {
-  itemStyle: {
+  item: {
     alignSelf: 'center',
     marginTop: 15,
-    marginLeft: 15,
-    marginRight: 15
   },
-  inputStyle: {
-    backgroundColor: 'white',
-    height: 60
-  },
-  outerViewStyle: {
+  outerView: {
     height: 150,
     marginTop: 50,
-    marginLeft: 15,
-    marginRight: 15,
+    marginBottom: 10,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'
   },
-  pageStyle: {
-    flex: 1,
+  page: {
+    flexGrow: 1,
     flexDirection: 'column',
     backgroundColor: '#ECEFF1',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: '12%'
   },
   profilePicContainer: {
     flex: 1,
