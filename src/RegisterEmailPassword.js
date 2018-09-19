@@ -99,6 +99,7 @@ class RegisterPhotoName extends Component {
           <Item style={styles.item} floatingLabel>
             <Label>Email</Label>
             <Input
+              keyboardType='email-address'
               onChangeText={this.onEmailChange.bind(this)}
               value={this.state.email}
             />

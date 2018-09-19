@@ -17,7 +17,7 @@ import {
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
-import { IMAGE_PICKER } from './constants/ErrorCodes';
+import { IMAGE_PICKER, UPDATE_USER } from './constants/ErrorCodes';
 import * as actions from './actions';
 import { IN_PROGRESS, NOT_SUBMITTED } from './constants/SubmittedTypes';
 
@@ -29,8 +29,23 @@ class RegisterPhotoName extends Component {
 
   state = {
     photoUpload: NOT_SUBMITTED,
-    submit: NOT_SUBMITTED
+    submitted: NOT_SUBMITTED,
+    firstName: '',
+    lastName: '',
+    phone: ''
   };
+
+  onFirstNameChange(firstName) {
+    this.setState({ firstName });
+  }
+
+  onLastNameChange(lastName) {
+    this.setState({ lastName });
+  }
+
+  onPhoneChange(phone) {
+    this.setState({ phone });
+  }
 
   onHardwareBackButton() {
     const nav = this.props.navigation;
@@ -49,6 +64,37 @@ class RegisterPhotoName extends Component {
     );
 
     return true;
+  }
+
+  onNext() {
+    this.setState({ submitted: IN_PROGRESS });
+
+    const state = this.state;
+    const fields = {
+      firstName: state.firstName,
+      lastName: state.lastName,
+      phone: state.phone
+    };
+
+    this.props.updateUser(this.props.user.id, fields)
+    .then(() => {
+      this.setState({ submitted: NOT_SUBMITTED });
+      console.log(this.props.user);
+      this.props.navigation.navigate('RoleSelection');
+    })
+    .catch((error) => {
+      this.setState({ submitted: NOT_SUBMITTED });
+      Toast.show({
+        text: error,
+        buttonText: 'Okay',
+        style: {
+          backgroundColor: '#d32f2f'
+        },
+        duration: 5000
+      });
+
+      firebase.crashlytics().recordError(UPDATE_USER, error);
+    });
   }
 
   pickPhoto() {
@@ -94,8 +140,31 @@ class RegisterPhotoName extends Component {
     }
   }
 
+  renderSubmit() {
+    switch (this.state.submitted) {
+      case IN_PROGRESS:
+        return (
+          <Button
+            dark
+            full
+          >
+            <Text>Submitting...</Text>
+          </Button>
+        );
+      default:
+        return (
+          <Button
+            onPress={this.onNext.bind(this)}
+            full
+          >
+            <Text>Next</Text>
+          </Button>
+        );
+    }
+  }
+
   render() {
-    const user = this.props.user;
+    const state = this.state;
 
     return (
       <AndroidBackHandler onBackPress={this.onHardwareBackButton.bind(this)}>
@@ -106,7 +175,7 @@ class RegisterPhotoName extends Component {
                 <Image
                   resizeMode={'cover'}
                   style={{ height: '100%', aspectRatio: 1 }}
-                  source={{ uri: user.pictureURL }}
+                  source={{ uri: this.props.user.pictureURL }}
                 />
               </View>
               <View style={styles.uploadButtonContainer}>
@@ -115,18 +184,30 @@ class RegisterPhotoName extends Component {
             </View>
             <Item style={styles.item} floatingLabel>
               <Label>First name</Label>
-              <Input value={user.firstName} />
+              <Input
+                onChangeText={this.onFirstNameChange.bind(this)}
+                value={state.firstName}
+              />
             </Item>
             <Item style={styles.item} floatingLabel>
               <Label>Last name</Label>
-              <Input value={user.lastName} />
+              <Input
+                onChangeText={this.onLastNameChange.bind(this)}
+                value={state.lastName}
+              />
+            </Item>
+            <Item style={styles.item} floatingLabel>
+              <Label>Phone number (optional)</Label>
+              <Input
+                keyboardType='phone-pad'
+                onChangeText={this.onPhoneChange.bind(this)}
+                value={state.phone}
+              />
             </Item>
           </Content>
           <Footer>
            <FooterTab>
-             <Button full>
-               <Text>Next</Text>
-             </Button>
+             {this.renderSubmit()}
            </FooterTab>
          </Footer>
         </Container>

@@ -1,5 +1,6 @@
 import firebase from 'react-native-firebase';
 import {
+  UPDATE_USER_DATA,
   REGISTER_USER_SUCCESS,
   IMAGE_UPLOAD_SUCCESS
 } from './types';
@@ -35,13 +36,24 @@ export const uploadProfilePic = (userId, uri) => (dispatch) => {
   return new Promise((resolve, reject) => {
     firebase.storage().ref(`profilePics/${userId}.jpg`).putFile(uri)
     .then((response) => {
-      const photoURL = response.downloadURL;
-      firebase.firestore().collection('users').doc(userId).update({ photoURL })
+      const pictureURL = response.downloadURL;
+      firebase.firestore().collection('users').doc(userId).update({ pictureURL })
       .then(() => {
-        dispatch({ type: IMAGE_UPLOAD_SUCCESS, payload: photoURL });
+        dispatch({ type: IMAGE_UPLOAD_SUCCESS, payload: pictureURL });
         resolve();
       })
       .catch((error) => reject(error.message));
+    })
+    .catch((error) => reject(error.message));
+  });
+};
+
+export const updateUser = (userId, fields) => (dispatch) => {
+  return new Promise((resolve, reject) => {
+    firebase.firestore().collection('users').doc(userId).update(fields)
+    .then(() => {
+      dispatch({ type: UPDATE_USER_DATA, payload: fields });
+      resolve();
     })
     .catch((error) => reject(error.message));
   });
