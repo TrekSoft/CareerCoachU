@@ -7,16 +7,15 @@ import {
   Button,
   Container,
   Content,
-  Footer,
-  FooterTab,
   Input,
   Item,
   Label,
-  Text,
-  Toast
+  Text
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import SubmitFooter from './components/SubmitFooter';
+import { showErrorToast } from './utils/ErrorToast';
 import { IMAGE_PICKER, UPDATE_USER } from './constants/ErrorCodes';
 import * as actions from './actions';
 import { IN_PROGRESS, NOT_SUBMITTED } from './constants/SubmittedTypes';
@@ -35,19 +34,19 @@ class RegisterPhotoName extends Component {
     phone: ''
   };
 
-  onFirstNameChange(firstName) {
+  onFirstNameChange = (firstName) => {
     this.setState({ firstName });
   }
 
-  onLastNameChange(lastName) {
+  onLastNameChange = (lastName) => {
     this.setState({ lastName });
   }
 
-  onPhoneChange(phone) {
+  onPhoneChange = (phone) => {
     this.setState({ phone });
   }
 
-  onHardwareBackButton() {
+  onHardwareBackButton = () => {
     const nav = this.props.navigation;
     const resetAction = StackActions.reset({
       index: 0,
@@ -66,38 +65,35 @@ class RegisterPhotoName extends Component {
     return true;
   }
 
-  onNext() {
+  onNext = () => {
     this.setState({ submitted: IN_PROGRESS });
 
     const state = this.state;
-    const fields = {
-      firstName: state.firstName,
-      lastName: state.lastName,
-      phone: state.phone
-    };
 
-    this.props.updateUser(this.props.user.id, fields)
-    .then(() => {
+    if (!state.firstName || !state.lastName) {
+      showErrorToast('First and last name cannot be empty');
       this.setState({ submitted: NOT_SUBMITTED });
-      console.log(this.props.user);
-      this.props.navigation.navigate('RoleSelection');
-    })
-    .catch((error) => {
-      this.setState({ submitted: NOT_SUBMITTED });
-      Toast.show({
-        text: error,
-        buttonText: 'Okay',
-        style: {
-          backgroundColor: '#d32f2f'
-        },
-        duration: 5000
+    } else {
+      const fields = {
+        firstName: state.firstName,
+        lastName: state.lastName,
+        phone: state.phone
+      };
+
+      this.props.updateUser(this.props.user.id, fields)
+      .then(() => {
+        this.setState({ submitted: NOT_SUBMITTED });
+        this.props.navigation.navigate('RoleSelection');
+      })
+      .catch((error) => {
+        this.setState({ submitted: NOT_SUBMITTED });
+        showErrorToast(error);
+        firebase.crashlytics().recordError(UPDATE_USER, error);
       });
-
-      firebase.crashlytics().recordError(UPDATE_USER, error);
-    });
+    }
   }
 
-  pickPhoto() {
+  pickPhoto = () => {
     ImagePicker.showImagePicker(null, (response) => {
       if (response.didCancel) {
         // Do nothing
@@ -110,14 +106,7 @@ class RegisterPhotoName extends Component {
         .then(() => this.setState({ photoUpload: NOT_SUBMITTED }))
         .catch((error) => {
           this.setState({ photoUpload: NOT_SUBMITTED });
-          Toast.show({
-            text: error,
-            buttonText: 'Okay',
-            style: {
-              backgroundColor: '#d32f2f'
-            },
-            duration: 5000
-          });
+          showErrorToast(error);
         });
       }
     });
@@ -133,31 +122,8 @@ class RegisterPhotoName extends Component {
         );
       default:
         return (
-          <Button onPress={this.pickPhoto.bind(this)}>
+          <Button onPress={this.pickPhoto}>
             <Text>Upload new</Text>
-          </Button>
-        );
-    }
-  }
-
-  renderSubmit() {
-    switch (this.state.submitted) {
-      case IN_PROGRESS:
-        return (
-          <Button
-            dark
-            full
-          >
-            <Text>Submitting...</Text>
-          </Button>
-        );
-      default:
-        return (
-          <Button
-            onPress={this.onNext.bind(this)}
-            full
-          >
-            <Text>Next</Text>
           </Button>
         );
     }
@@ -167,7 +133,7 @@ class RegisterPhotoName extends Component {
     const state = this.state;
 
     return (
-      <AndroidBackHandler onBackPress={this.onHardwareBackButton.bind(this)}>
+      <AndroidBackHandler onBackPress={this.onHardwareBackButton}>
         <Container>
           <Content contentContainerStyle={styles.page}>
             <View style={styles.outerView}>
@@ -185,14 +151,14 @@ class RegisterPhotoName extends Component {
             <Item style={styles.item} floatingLabel>
               <Label>First name</Label>
               <Input
-                onChangeText={this.onFirstNameChange.bind(this)}
+                onChangeText={this.onFirstNameChange}
                 value={state.firstName}
               />
             </Item>
             <Item style={styles.item} floatingLabel>
               <Label>Last name</Label>
               <Input
-                onChangeText={this.onLastNameChange.bind(this)}
+                onChangeText={this.onLastNameChange}
                 value={state.lastName}
               />
             </Item>
@@ -200,16 +166,15 @@ class RegisterPhotoName extends Component {
               <Label>Phone number (optional)</Label>
               <Input
                 keyboardType='phone-pad'
-                onChangeText={this.onPhoneChange.bind(this)}
+                onChangeText={this.onPhoneChange}
                 value={state.phone}
               />
             </Item>
           </Content>
-          <Footer>
-           <FooterTab>
-             {this.renderSubmit()}
-           </FooterTab>
-         </Footer>
+          <SubmitFooter
+            state={this.state.submitted}
+            callback={this.onNext}
+          />
         </Container>
       </AndroidBackHandler>
     );

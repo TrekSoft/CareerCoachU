@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import {
-  Button,
   Container,
   Content,
-  Footer,
-  FooterTab,
   Input,
   Item,
   Label,
-  Text,
-  Toast
+  Text
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import { showErrorToast } from './utils/ErrorToast';
+import SubmitFooter from './components/SubmitFooter';
 import { REGISTER_USER } from './constants/ErrorCodes';
 import { IN_PROGRESS, NOT_SUBMITTED } from './constants/SubmittedTypes';
 import * as actions from './actions';
@@ -33,15 +31,15 @@ class RegisterPhotoName extends Component {
     this.setState({ email: this.props.user.email });
   }
 
-  onEmailChange(email) {
+  onEmailChange = (email) => {
     this.setState({ email });
   }
 
-  onPasswordChange(password) {
+  onPasswordChange = (password) => {
     this.setState({ password });
   }
 
-  onNext() {
+  onNext = () => {
     this.setState({ submitted: IN_PROGRESS });
 
     this.props.registerUser(this.props.user, this.state.email, this.state.password)
@@ -51,40 +49,10 @@ class RegisterPhotoName extends Component {
     })
     .catch((error) => {
       this.setState({ submitted: NOT_SUBMITTED });
-      Toast.show({
-        text: error,
-        buttonText: 'Okay',
-        style: {
-          backgroundColor: '#d32f2f'
-        },
-        duration: 5000
-      });
+      showErrorToast(error);
 
       firebase.crashlytics().recordError(REGISTER_USER, error);
     });
-  }
-
-  renderSubmit() {
-    switch (this.state.submitted) {
-      case IN_PROGRESS:
-        return (
-          <Button
-            dark
-            full
-          >
-            <Text>Submitting...</Text>
-          </Button>
-        );
-      default:
-        return (
-          <Button
-            onPress={this.onNext.bind(this)}
-            full
-          >
-            <Text>Next</Text>
-          </Button>
-        );
-    }
   }
 
   render() {
@@ -100,24 +68,23 @@ class RegisterPhotoName extends Component {
             <Label>Email</Label>
             <Input
               keyboardType='email-address'
-              onChangeText={this.onEmailChange.bind(this)}
+              onChangeText={this.onEmailChange}
               value={this.state.email}
             />
           </Item>
           <Item style={styles.item} floatingLabel>
             <Label>Password</Label>
             <Input
-              onChangeText={this.onPasswordChange.bind(this)}
+              onChangeText={this.onPasswordChange}
               value={this.state.password}
               secureTextEntry
             />
           </Item>
         </Content>
-        <Footer>
-          <FooterTab>
-            {this.renderSubmit()}
-          </FooterTab>
-        </Footer>
+        <SubmitFooter
+          state={this.state.submitted}
+          callback={this.onNext}
+        />
       </Container>
     );
   }
