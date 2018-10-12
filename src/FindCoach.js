@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Container, Content, Item, Input, Button, Text } from 'native-base';
+import { Container, Content, Item, Input, Label, Button, Text } from 'native-base';
 import firebase from 'react-native-firebase';
+import * as styles from './styles';
 import {
   NOT_SUBMITTED,
   IN_PROGRESS,
@@ -36,7 +37,7 @@ class FindCoach extends Component {
         return (
           <Button
             success
-            style={styles.buttonStyle}
+            style={styles.buttonSubmit}
           >
             <Text>You&apos;re all signed up</Text>
           </Button>
@@ -45,7 +46,7 @@ class FindCoach extends Component {
         return (
           <Button
             light
-            style={styles.buttonStyle}
+            style={styles.buttonSubmit}
             disabled
           >
             <Text>Signing you up...</Text>
@@ -54,7 +55,7 @@ class FindCoach extends Component {
       default:
         return (
           <Button
-            style={styles.buttonStyle}
+            style={styles.buttonSubmit}
             onPress={this.onEmailSubmit.bind(this)}
           >
             <Text>Sure, let me know!</Text>
@@ -66,14 +67,13 @@ class FindCoach extends Component {
   render() {
     return (
       <Container>
-        <Content contentContainerStyle={styles.pageStyle}>
-            <Text style={styles.textStyle}>Coming Soon</Text>
+        <Content contentContainerStyle={[styles.page, styles.verticalCenter]}>
+            <Text style={styles.header2}>Coming Soon</Text>
             <Text>Would you like to be notified</Text>
             <Text>when this is ready?</Text>
-            <Item style={styles.itemStyle} regular>
+            <Item style={styles.itemTop} floatingLabel>
+              <Label>Email address</Label>
               <Input
-                style={styles.inputStyle}
-                placeholder='Email address'
                 onChangeText={this.onEmailChange.bind(this)}
                 value={this.state.email}
               />
@@ -83,7 +83,7 @@ class FindCoach extends Component {
 
             {
               this.state.submitted === SUBMIT_ERROR &&
-              <Text style={styles.errorTextStyle}>
+              <Text style={styles.errorText}>
                 Sorry, something went wrong. Do you have internet?
               </Text>
             }
@@ -92,41 +92,5 @@ class FindCoach extends Component {
     );
   }
 }
-
-const styles = {
-  textStyle: {
-    fontSize: 50,
-    color: '#616161',
-    marginBottom: 20,
-    marginTop: -100
-  },
-  errorTextStyle: {
-    color: 'red'
-  },
-  pageStyle: {
-    flexGrow: 1,
-    flexDirection: 'column',
-    backgroundColor: '#ECEFF1',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: '12%'
-  },
-  itemStyle: {
-    alignSelf: 'center',
-    marginTop: 15
-  },
-  inputStyle: {
-    backgroundColor: 'white',
-    height: 60
-  },
-  buttonStyle: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    marginTop: 15,
-    marginBottom: 15,
-    width: '100%',
-    height: 60
-  }
-};
 
 export default FindCoach;

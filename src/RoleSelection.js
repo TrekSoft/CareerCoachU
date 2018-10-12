@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import * as styles from './styles';
 import * as actions from './actions';
 
 class RoleSelection extends Component {
@@ -25,7 +26,7 @@ class RoleSelection extends Component {
       role =>
         <Button
           onPress={() => this.chooseRole(role)}
-          style={styles.buttonStyle}
+          style={styles.buttonMain}
           key={role.id}
         >
           <Text>{role.actionText}</Text>
@@ -36,38 +37,14 @@ class RoleSelection extends Component {
   render() {
     return (
       <Container>
-        <Content contentContainerStyle={styles.pageStyle}>
-            <Text style={styles.textStyle}>I want to</Text>
+        <Content contentContainerStyle={[styles.page, styles.verticalCenter]}>
+            <Text style={styles.header}>I want to</Text>
             {this.renderButtons()}
         </Content>
       </Container>
     );
   }
 }
-
-const styles = {
-  textStyle: {
-    fontSize: 60,
-    color: '#616161',
-    marginBottom: 40,
-    marginTop: -50
-  },
-  pageStyle: {
-    flexGrow: 1,
-    flexDirection: 'column',
-    backgroundColor: '#ECEFF1',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: '12%'
-  },
-  buttonStyle: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-    width: '100%',
-    height: 75
-  }
-};
 
 const mapStateToProps = state => (
   {

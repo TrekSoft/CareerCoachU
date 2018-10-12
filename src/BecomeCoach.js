@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Container, Content, Button, Text } from 'native-base';
 import { connect } from 'react-redux';
 import LinkedInModal from 'react-native-linkedin';
+import * as styles from './styles';
 import * as actions from './actions';
 
 class BecomeCoach extends Component {
@@ -12,8 +13,8 @@ class BecomeCoach extends Component {
   render() {
     return (
       <Container>
-        <Content contentContainerStyle={styles.page}>
-            <Text style={styles.text}>
+        <Content contentContainerStyle={[styles.page, styles.verticalCenter]}>
+            <Text style={styles.header4}>
               We highly recommend signing up with your LinkedIn account.
               This will help build trust with clients and enable them
               to easily review your accomplishments and experience.
@@ -21,14 +22,14 @@ class BecomeCoach extends Component {
 
             <Button
               onPress={() => this.modal.open()}
-              style={[styles.button, styles.linkedin]}
+              style={[styles.buttonMain, styles.linkedin]}
             >
               <Text>Sign up with LinkedIn</Text>
             </Button>
 
             <Button
               onPress={() => this.props.navigation.navigate('RegisterEmailPassword')}
-              style={[styles.button, styles.skip]}
+              style={[styles.buttonMain, styles.skip]}
             >
               <Text>Skip</Text>
             </Button>
@@ -52,34 +53,5 @@ class BecomeCoach extends Component {
     );
   }
 }
-
-const styles = {
-  text: {
-    marginTop: '-25%',
-    marginBottom: 25,
-    paddingHorizontal: 2
-  },
-  page: {
-    flex: 1,
-    flexDirection: 'column',
-    backgroundColor: '#ECEFF1',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: '12%'
-  },
-  button: {
-    alignSelf: 'center',
-    justifyContent: 'center',
-    marginBottom: 15,
-    width: '100%',
-    height: 75
-  },
-  linkedin: {
-    backgroundColor: '#0077B5'
-  },
-  skip: {
-    backgroundColor: '#999'
-  }
-};
 
 export default connect(null, actions)(BecomeCoach);

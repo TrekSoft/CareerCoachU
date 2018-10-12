@@ -14,6 +14,7 @@ import {
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import * as styles from './styles';
 import SubmitFooter from './components/SubmitFooter';
 import { showErrorToast } from './utils/ErrorToast';
 import { IMAGE_PICKER, UPDATE_USER } from './constants/ErrorCodes';
@@ -33,6 +34,14 @@ class RegisterPhotoName extends Component {
     lastName: '',
     phone: ''
   };
+
+  componentDidMount() {
+    this.setState({
+      firstName: this.props.user.firstName,
+      lastName: this.props.user.lastName,
+      phone: this.props.user.phone
+    });
+  }
 
   onFirstNameChange = (firstName) => {
     this.setState({ firstName });
@@ -136,7 +145,7 @@ class RegisterPhotoName extends Component {
       <AndroidBackHandler onBackPress={this.onHardwareBackButton}>
         <Container>
           <Content contentContainerStyle={styles.page}>
-            <View style={styles.outerView}>
+            <View style={styles.editProfilePic}>
               <View style={styles.profilePicContainer}>
                 <Image
                   resizeMode={'cover'}
@@ -180,39 +189,6 @@ class RegisterPhotoName extends Component {
     );
   }
 }
-
-const styles = {
-  item: {
-    alignSelf: 'center',
-    marginTop: 15,
-  },
-  outerView: {
-    height: 150,
-    marginTop: 50,
-    marginBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  page: {
-    flexGrow: 1,
-    flexDirection: 'column',
-    backgroundColor: '#ECEFF1',
-    alignItems: 'center',
-    paddingHorizontal: '12%'
-  },
-  profilePicContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-start'
-  },
-  uploadButtonContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-};
 
 const mapStateToProps = state => (
   {

@@ -10,6 +10,7 @@ import {
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
+import * as styles from './styles';
 import { showErrorToast } from './utils/ErrorToast';
 import SubmitFooter from './components/SubmitFooter';
 import { REGISTER_USER } from './constants/ErrorCodes';
@@ -60,7 +61,7 @@ class RegisterPhotoName extends Component {
       <Container>
         <Content contentContainerStyle={styles.page}>
           <View style={[styles.outerView, styles.headerContainer]}>
-            <Text style={styles.headerText}>
+            <Text style={styles.header3}>
               Choose an email and password
             </Text>
           </View>
@@ -89,38 +90,6 @@ class RegisterPhotoName extends Component {
     );
   }
 }
-
-const styles = {
-  errorContainer: {
-    marginTop: 10
-  },
-  errorText: {
-    color: '#d32f2f'
-  },
-  item: {
-    marginTop: 15,
-    marginBottom: 15
-  },
-  headerContainer: {
-    marginTop: 50,
-    marginBottom: 20
-  },
-  headerText: {
-    fontSize: 35,
-    color: '#616161',
-    textAlign: 'center'
-  },
-  outerView: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  page: {
-    flexGrow: 1,
-    backgroundColor: '#ECEFF1',
-    paddingHorizontal: '12%'
-  }
-};
 
 const mapStateToProps = state => (
   {

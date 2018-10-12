@@ -27,7 +27,7 @@ export const getLinkedInData = (auth) => (dispatch) => {
   )
   .then((response) => response.json())
   .then((response) => {
-    const pictureURL = response.pictureUrls.values.length > 0 ? 
+    const pictureURL = response.pictureUrls.values.length > 0 ?
       response.pictureUrls.values[0] : PROFILE_PIC_PLACEHOLDER;
 
     dispatch({
