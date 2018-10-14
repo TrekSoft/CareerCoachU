@@ -4,6 +4,7 @@ import FindCoach from './FindCoach';
 import BecomeCoach from './BecomeCoach';
 import EditCoachProfile from './EditCoachProfile';
 import RegisterPhotoName from './RegisterPhotoName';
+import RegisterExperience from './RegisterExperience';
 import RegisterEmailPassword from './RegisterEmailPassword';
 
 const Router = createStackNavigator(
@@ -13,7 +14,8 @@ const Router = createStackNavigator(
     BecomeCoach,
     EditCoachProfile,
     RegisterEmailPassword,
-    RegisterPhotoName
+    RegisterPhotoName,
+    RegisterExperience
   },
   {
     initialRouteName: 'RoleSelection',

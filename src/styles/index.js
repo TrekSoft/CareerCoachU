@@ -66,6 +66,11 @@ export const item = {
   marginTop: 15
 };
 
+export const itemPadded = {
+  marginTop: 15,
+  paddingHorizontal: 5
+};
+
 export const itemTop = {
   marginTop: 25
 };

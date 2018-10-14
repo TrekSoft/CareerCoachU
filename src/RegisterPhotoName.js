@@ -92,7 +92,7 @@ class RegisterPhotoName extends Component {
       this.props.updateUser(this.props.user.id, fields)
       .then(() => {
         this.setState({ submitted: NOT_SUBMITTED });
-        this.props.navigation.navigate('RoleSelection');
+        this.props.navigation.navigate('RegisterExperience');
       })
       .catch((error) => {
         this.setState({ submitted: NOT_SUBMITTED });
