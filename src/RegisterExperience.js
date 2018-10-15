@@ -72,12 +72,13 @@ class RegisterExperience extends Component {
 
     const state = this.state;
 
-    if (!state.title) {
-      showErrorToast('Title cannot be blank');
+    if (!state.title || !state.industry) {
+      showErrorToast('Title and industry cannot be blank');
       this.setState({ submitted: NOT_SUBMITTED });
     } else {
       const fields = {
         title: state.title,
+        industry: state.industry,
         profileURL: state.profileURL
       };
 
@@ -110,11 +111,12 @@ class RegisterExperience extends Component {
               value={this.state.title}
             />
           </Item>
-          <Item style={styles.itemPadded} stackedLabel>
+          <Item style={styles.item} stackedLabel>
             <Label>Industry</Label>
             <Button
               onPress={this.onShowModal}
-              block
+              style={styles.buttonDropdown}
+              full
               iconRight
               transparent
               primary
@@ -124,7 +126,7 @@ class RegisterExperience extends Component {
             </Button>
           </Item>
           <Item style={styles.item} floatingLabel>
-            <Label>URL to your LinkedIn Profile</Label>
+            <Label>URL to your LinkedIn Profile (optional)</Label>
             <Input
               onChangeText={this.onProfileURLChange}
               value={this.state.profileURL}

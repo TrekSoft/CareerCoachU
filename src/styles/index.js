@@ -7,6 +7,10 @@ const buttonBase = {
   width: '100%'
 };
 
+export const buttonDropdown = {
+  justifyContent: 'space-between'
+};
+
 export const buttonMain = {
   ...buttonBase,
   height: 75
@@ -63,12 +67,8 @@ export const headerContainer = {
 };
 
 export const item = {
-  marginTop: 15
-};
-
-export const itemPadded = {
   marginTop: 15,
-  paddingHorizontal: 5
+  width: '100%'
 };
 
 export const itemTop = {
