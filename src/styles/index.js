@@ -71,6 +71,10 @@ export const item = {
   width: '100%'
 };
 
+export const itemList = {
+  width: '100%'
+};
+
 export const itemTop = {
   marginTop: 25
 };
@@ -91,6 +95,11 @@ export const page = {
   backgroundColor: '#ECEFF1',
   alignItems: 'center',
   paddingHorizontal: '12%'
+};
+
+export const pagePadding = {
+  ...page,
+  paddingBottom: '12%'
 };
 
 export const profilePicContainer = {

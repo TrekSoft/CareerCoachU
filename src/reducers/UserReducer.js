@@ -15,7 +15,8 @@ const INITIAL_STATE = {
   industry: '',
   bio: '',
   profileURL: '',
-  pictureURL: PROFILE_PIC_PLACEHOLDER
+  pictureURL: PROFILE_PIC_PLACEHOLDER,
+  topics: []
 };
 
 export default (state = INITIAL_STATE, action) => {
