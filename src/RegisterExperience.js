@@ -8,7 +8,8 @@ import {
   Input,
   Item,
   Label,
-  Text
+  Text,
+  Textarea
 } from 'native-base';
 import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
@@ -30,6 +31,7 @@ class RegisterExperience extends Component {
     title: '',
     industry: '',
     profileURL: '',
+    bio: '',
     submitted: NOT_SUBMITTED,
     modalVisible: false
   };
@@ -38,7 +40,8 @@ class RegisterExperience extends Component {
     this.setState({
       title: this.props.user.title,
       industry: this.props.user.industry,
-      profileURL: this.props.user.profileURL
+      profileURL: this.props.user.profileURL,
+      bio: this.props.user.bio
     });
   }
 
@@ -48,6 +51,10 @@ class RegisterExperience extends Component {
 
   onProfileURLChange = (profileURL) => {
     this.setState({ profileURL });
+  }
+
+  onBioChange = (bio) => {
+    this.setState({ bio });
   }
 
   onSelect = (picked) => {
@@ -79,7 +86,8 @@ class RegisterExperience extends Component {
       const fields = {
         title: state.title,
         industry: state.industry,
-        profileURL: state.profileURL
+        profileURL: state.profileURL,
+        bio: state.bio
       };
 
       this.props.updateUser(this.props.user.id, fields)
@@ -104,9 +112,10 @@ class RegisterExperience extends Component {
               Tell us about your experience
             </Text>
           </View>
-          <Item style={styles.item} floatingLabel>
+          <Item style={styles.item} stackedLabel>
             <Label>Title</Label>
             <Input
+              style={styles.itemInput}
               onChangeText={this.onTitleChange}
               value={this.state.title}
             />
@@ -125,11 +134,22 @@ class RegisterExperience extends Component {
               <Icon name='arrow-dropdown' />
             </Button>
           </Item>
-          <Item style={styles.item} floatingLabel>
+          <Item style={styles.item} stackedLabel>
             <Label>URL to your LinkedIn Profile (optional)</Label>
             <Input
+              style={styles.itemInput}
               onChangeText={this.onProfileURLChange}
               value={this.state.profileURL}
+            />
+          </Item>
+          <Item style={styles.item} stackedLabel>
+            <Label>Public Bio Summary</Label>
+            <Textarea
+              style={styles.itemInput}
+              rowSpan={5}
+              bordered
+              onChangeText={this.onBioChange}
+              value={this.state.bio}
             />
           </Item>
           <ModalFilterPicker

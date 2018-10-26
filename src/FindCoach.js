@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Content, Item, Input, Label, Button, Text } from 'native-base';
 import firebase from 'react-native-firebase';
+import { showErrorToast } from './utils/ErrorToast';
 import * as styles from './styles';
 import {
   NOT_SUBMITTED,
@@ -24,11 +25,15 @@ class FindCoach extends Component {
   }
 
   onEmailSubmit() {
-    this.setState({ submitted: IN_PROGRESS });
+    if (!this.state.email) {
+      showErrorToast('Please enter a valid email address');
+    } else {
+      this.setState({ submitted: IN_PROGRESS });
 
-    firebase.firestore().collection('comingSoonEmails').add({ email: this.state.email })
-    .then(() => this.setState({ submitted: SUBMIT_SUCCESS }))
-    .catch(() => this.setState({ submitted: SUBMIT_ERROR }));
+      firebase.firestore().collection('comingSoonEmails').add({ email: this.state.email })
+      .then(() => this.setState({ submitted: SUBMIT_SUCCESS }))
+      .catch(() => this.setState({ submitted: SUBMIT_ERROR }));
+    }
   }
 
   renderSubmit() {
@@ -71,9 +76,10 @@ class FindCoach extends Component {
             <Text style={styles.header2}>Coming Soon</Text>
             <Text>Would you like to be notified</Text>
             <Text>when this is ready?</Text>
-            <Item style={styles.itemTop} floatingLabel>
+            <Item style={styles.itemTop} stackedLabel>
               <Label>Email address</Label>
               <Input
+                style={styles.itemInput}
                 onChangeText={this.onEmailChange.bind(this)}
                 value={this.state.email}
               />

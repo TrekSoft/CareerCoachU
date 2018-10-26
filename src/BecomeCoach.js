@@ -28,7 +28,7 @@ class BecomeCoach extends Component {
             </Button>
 
             <Button
-              onPress={() => this.props.navigation.navigate('RegisterEmailPassword')}
+              onPress={() => this.props.navigation.navigate('RegisterPriceLocation')}
               style={[styles.buttonMain, styles.skip]}
             >
               <Text>Skip</Text>

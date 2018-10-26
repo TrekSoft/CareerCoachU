@@ -16,6 +16,9 @@ const INITIAL_STATE = {
   bio: '',
   profileURL: '',
   pictureURL: PROFILE_PIC_PLACEHOLDER,
+  rate: 20,
+  online: false,
+  inPerson: false,
   topics: []
 };
 

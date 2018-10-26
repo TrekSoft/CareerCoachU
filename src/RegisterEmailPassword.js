@@ -41,19 +41,25 @@ class RegisterPhotoName extends Component {
   }
 
   onNext = () => {
-    this.setState({ submitted: IN_PROGRESS });
+    const state = this.state;
 
-    this.props.registerUser(this.props.user, this.state.email, this.state.password)
-    .then(() => {
-      this.setState({ submitted: NOT_SUBMITTED });
-      this.props.navigation.navigate('RegisterPhotoName');
-    })
-    .catch((error) => {
-      this.setState({ submitted: NOT_SUBMITTED });
-      showErrorToast(error);
+    if (!state.email || !state.password) {
+      showErrorToast('Email and password cannot be empty');
+    } else {
+      this.setState({ submitted: IN_PROGRESS });
 
-      firebase.crashlytics().recordError(REGISTER_USER, error);
-    });
+      this.props.registerUser(this.props.user, this.state.email, this.state.password)
+      .then(() => {
+        this.setState({ submitted: NOT_SUBMITTED });
+        this.props.navigation.navigate('RegisterPhotoName');
+      })
+      .catch((error) => {
+        this.setState({ submitted: NOT_SUBMITTED });
+        showErrorToast(error);
+
+        firebase.crashlytics().recordError(REGISTER_USER, error);
+      });
+    }
   }
 
   render() {
@@ -65,17 +71,19 @@ class RegisterPhotoName extends Component {
               Choose an email and password
             </Text>
           </View>
-          <Item style={styles.item} floatingLabel>
+          <Item style={styles.item} stackedLabel>
             <Label>Email</Label>
             <Input
               keyboardType='email-address'
+              style={styles.itemInput}
               onChangeText={this.onEmailChange}
               value={this.state.email}
             />
           </Item>
-          <Item style={styles.item} floatingLabel>
+          <Item style={styles.item} stackedLabel>
             <Label>Password</Label>
             <Input
+              style={styles.itemInput}
               onChangeText={this.onPasswordChange}
               value={this.state.password}
               secureTextEntry

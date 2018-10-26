@@ -157,24 +157,27 @@ class RegisterPhotoName extends Component {
                 {this.renderPhotoUpload()}
               </View>
             </View>
-            <Item style={styles.item} floatingLabel>
+            <Item style={styles.item} stackedLabel>
               <Label>First name</Label>
               <Input
+                style={styles.itemInput}
                 onChangeText={this.onFirstNameChange}
                 value={state.firstName}
               />
             </Item>
-            <Item style={styles.item} floatingLabel>
+            <Item style={styles.item} stackedLabel>
               <Label>Last name</Label>
               <Input
+                style={styles.itemInput}
                 onChangeText={this.onLastNameChange}
                 value={state.lastName}
               />
             </Item>
-            <Item style={styles.item} floatingLabel>
+            <Item style={styles.item} stackedLabel>
               <Label>Phone number (optional)</Label>
               <Input
                 keyboardType='phone-pad'
+                style={styles.itemInput}
                 onChangeText={this.onPhoneChange}
                 value={state.phone}
               />

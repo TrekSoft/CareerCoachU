@@ -71,12 +71,19 @@ export const item = {
   width: '100%'
 };
 
+export const itemInput = {
+  width: '100%',
+  backgroundColor: '#fff',
+  elevation: 1
+};
+
 export const itemList = {
   width: '100%'
 };
 
 export const itemTop = {
-  marginTop: 25
+  marginTop: 25,
+  width: '100%'
 };
 
 export const linkedin = {

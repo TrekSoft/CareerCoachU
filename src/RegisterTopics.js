@@ -40,7 +40,8 @@ class RegisterTopics extends Component {
     });
   }
 
-  onSelect = (id) => {
+  onSelect = (topic) => {
+    const id = topic.id;
     const allTopics = this.state.allTopics;
     allTopics[id].selected = !allTopics[id].selected;
 
@@ -67,7 +68,7 @@ class RegisterTopics extends Component {
       this.props.updateUser(this.props.user.id, fields)
       .then(() => {
         this.setState({ submitted: NOT_SUBMITTED });
-        this.props.navigation.navigate('RoleSelection');
+        this.props.navigation.navigate('RegisterPriceLocation');
       })
       .catch((error) => {
         this.setState({ submitted: NOT_SUBMITTED });
@@ -83,7 +84,7 @@ class RegisterTopics extends Component {
         <ListItem
           style={styles.itemList}
           key={topic.id}
-          onPress={() => this.onSelect(topic.id)}
+          onPress={this.onSelect}
         >
           <CheckBox checked={topic.selected} />
           <Body>

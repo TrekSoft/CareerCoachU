@@ -7,6 +7,7 @@ import RegisterPhotoName from './RegisterPhotoName';
 import RegisterExperience from './RegisterExperience';
 import RegisterTopics from './RegisterTopics';
 import RegisterEmailPassword from './RegisterEmailPassword';
+import RegisterPriceLocation from './RegisterPriceLocation';
 
 const Router = createStackNavigator(
   {
@@ -17,7 +18,8 @@ const Router = createStackNavigator(
     RegisterEmailPassword,
     RegisterPhotoName,
     RegisterExperience,
-    RegisterTopics
+    RegisterTopics,
+    RegisterPriceLocation
   },
   {
     initialRouteName: 'RoleSelection',
