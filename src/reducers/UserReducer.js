@@ -1,6 +1,5 @@
 import { PROFILE_PIC_PLACEHOLDER } from '../constants/ImageURLs';
 import {
-  SET_USER_DATA,
   UPDATE_USER_DATA,
   REGISTER_USER_SUCCESS,
   IMAGE_UPLOAD_SUCCESS
@@ -16,16 +15,18 @@ const INITIAL_STATE = {
   bio: '',
   profileURL: '',
   pictureURL: PROFILE_PIC_PLACEHOLDER,
-  rate: 20,
+  rate: 0,
   online: false,
   inPerson: false,
-  topics: []
+  topics: [],
+  address: '',
+  longitude: '',
+  latitude: '',
+  range: 0
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case SET_USER_DATA:
-      return { ...action.payload };
     case UPDATE_USER_DATA:
       return { ...state, ...action.payload };
     case REGISTER_USER_SUCCESS:

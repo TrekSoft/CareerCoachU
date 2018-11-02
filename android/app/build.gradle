@@ -139,6 +139,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-google-places')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-firebase')
     implementation fileTree(dir: "libs", include: ["*.jar"])

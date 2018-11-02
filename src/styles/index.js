@@ -81,9 +81,30 @@ export const itemList = {
   width: '100%'
 };
 
+export const itemSlider = {
+  flexDirection: 'row',
+  marginBottom: 25
+};
+
 export const itemTop = {
   marginTop: 25,
   width: '100%'
+};
+
+export const label = {
+  marginTop: 25,
+  marginBottom: 15,
+  alignSelf: 'flex-start'
+};
+
+export const labelTop = {
+  ...label,
+  marginTop: 20
+};
+
+export const labelMid = {
+  ...label,
+  marginTop: 0
 };
 
 export const linkedin = {
@@ -117,6 +138,12 @@ export const profilePicContainer = {
 
 export const skip = {
   backgroundColor: '#999'
+};
+
+export const sliderNumber = {
+  flex: 0,
+  width: 75,
+  backgroundColor: '#fff'
 };
 
 export const uploadButtonContainer = {

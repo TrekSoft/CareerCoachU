@@ -43,6 +43,7 @@ class RegisterTopics extends Component {
   onSelect = (topic) => {
     const id = topic.id;
     const allTopics = this.state.allTopics;
+    console.log(topic);
     allTopics[id].selected = !allTopics[id].selected;
 
     this.setState({
@@ -84,7 +85,7 @@ class RegisterTopics extends Component {
         <ListItem
           style={styles.itemList}
           key={topic.id}
-          onPress={this.onSelect}
+          onPress={() => this.onSelect(topic)}
         >
           <CheckBox checked={topic.selected} />
           <Body>

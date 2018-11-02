@@ -6,6 +6,7 @@
 - react-native link
 - Native setup for https://rnfirebase.io/docs/v4.3.x/installation/android and /ios
 - Native setup for https://github.com/react-community/react-native-image-picker#install
+- Native setup for https://github.com/tolu360/react-native-google-places
 - Install these modules for Firebase:
   - https://rnfirebase.io/docs/v4.3.x/auth/android
   - https://rnfirebase.io/docs/v4.3.x/firestore/android
